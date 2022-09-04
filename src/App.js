@@ -28,7 +28,7 @@ function App() {
         </Routes>
         <Routes>
           {/* //  el "*"  Just Check it out  whe to use it.  */}
-          <Route path="/error" element={<Error />} />
+          <Route path="*" element={<Error />} />
         </Routes>
       </Router>
     </ErrorBondary>

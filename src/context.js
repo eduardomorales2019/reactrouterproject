@@ -17,20 +17,51 @@ const AppProvider = ({ children }) => {
   const [searchTerm, setSearchTerm] = useState("a"); // why!!!! checl later .. essetial have something right now
   const [cocktails, setCocktails] = useState([]);
 
-  const fetchDrinks = async () => {
-    const url = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=";
+  // const fetchDrinks =  useCallback(  async () => {
+  //   const url = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=";
+  //   setLoading(true);
+  //   try {
+  //     const { data } = await axios(`${url}${searchTerm}`);
+  //     // const response = await fetch(`${url}${searchTerm}`);
+  //     const { drinks } = data;
+
+  //     if (drinks) {
+  //       const newDrinks = drinks.map((item) => {
+  //         console.log(item);
+  //         const { idDrink, strDrink, strDrinkThumb, strAlcoholic, strGlass } =
+  //           item;
+  //         //  return an object
+  //         return {
+  //           id: idDrink,
+  //           name: strDrink,
+  //           image: strDrinkThumb,
+  //           info: strAlcoholic,
+  //           glass: strGlass,
+  //         };
+  //       });
+  //       setCocktails(newDrinks);
+  //     } else {
+  //       setCocktails([]);
+  //     }
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  //   setLoading(false);
+  // }),[searchTerm];
+
+  const fetchDrinks = useCallback(async () => {
     setLoading(true);
     try {
-      const { data } = await axios(`${url}${searchTerm}`);
-      // const response = await fetch(`${url}${searchTerm}`);
+      const response = await fetch(`${url}${searchTerm}`);
+      const data = await response.json();
+      console.log(data);
       const { drinks } = data;
-
       if (drinks) {
-        const newDrinks = drinks.map((item) => {
-          console.log(item);
+        const newCocktails = drinks.map((item) => {
           const { idDrink, strDrink, strDrinkThumb, strAlcoholic, strGlass } =
             item;
-          //  return an object
+
           return {
             id: idDrink,
             name: strDrink,
@@ -39,20 +70,20 @@ const AppProvider = ({ children }) => {
             glass: strGlass,
           };
         });
-        setCocktails(newDrinks);
+        setCocktails(newCocktails);
       } else {
         setCocktails([]);
       }
       setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
-    setLoading(false);
-  };
+  }, [searchTerm]);
 
   useEffect(() => {
     fetchDrinks();
-  }, [searchTerm]);
+  }, [searchTerm, fetchDrinks]);
 
   // ==========================
   return (
